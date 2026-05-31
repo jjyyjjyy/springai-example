@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: springai-example
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY}
+        chat:
+          model: gemini-3.1-flash-lite
+        embedding:
+          api-key: ${GEMINI_API_KEY}
+          text:
+            options:
+              model: gemini-embedding-2
+    chat:
+      observations:
+        log-completion: true
+        log-prompt: true
+    tools:
+      observations:
+        include-content: true
+
+logging:
+  level:
+    org.springframework.ai: DEBUG
+
+kind: Application

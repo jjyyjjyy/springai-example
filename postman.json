@@ -1,0 +1,876 @@
+{
+  "info": {
+    "_postman_id": "8230041c-9fa4-41f6-ae40-03ff85aadc59",
+    "name": "Spring AI 2.0.0-SNAPSHOT Examples",
+    "description": "Postman Collection for testing progressive Spring AI 2.0.0-SNAPSHOT examples using Google Gemini models.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Category 1: ChatClient API & Basics",
+      "item": [
+        {
+          "name": "Example 1: Basic Chat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Explain Spring AI in one sentence.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/chat/simple",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "chat",
+                "simple"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 2: Custom Options",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Write a haiku about Java 25.\",\n  \"temperature\": 0.9\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/chat/options",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "chat",
+                "options"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 3: Streaming Chat",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Write a short essay on AI agents.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/chat/stream",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "chat",
+                "stream"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 4: Prompt Templates",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language\": \"Chinese\",\n  \"text\": \"I love programming in Spring Boot!\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/chat/template",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "chat",
+                "template"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 5: Message Roles",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What is the best IDE for Java?\",\n  \"systemPersona\": \"You are a grumpy 80-year-old COBOL developer who hates modern Java.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/chat/roles",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "chat",
+                "roles"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Category 2: Structured Output",
+      "item": [
+        {
+          "name": "Example 6: Bean Output",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookName\": \"The Great Gatsby\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/structured/bean",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "structured",
+                "bean"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 7: Map Output",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyName\": \"Google\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/structured/map",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "structured",
+                "map"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 8: List Output",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"domain\": \"frontend\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/structured/list",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "structured",
+                "list"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Category 3: Multimodality",
+      "item": [
+        {
+          "name": "Example 9: Image Analysis",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imageUrl\": \"https://images.unsplash.com/photo-1579546929518-9e396f3cc809\",\n  \"prompt\": \"Describe the colors and feelings evoked by this abstract image.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/multimodal/image",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "multimodal",
+                "image"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 10: Audio Description",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"audioUrl\": \"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3\",\n  \"prompt\": \"Describe the music in this audio clip, including the tempo, instruments, and vibe.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/multimodal/audio",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "multimodal",
+                "audio"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Category 4: Function Calling & Tools",
+      "item": [
+        {
+          "name": "Example 11: Weather Tool (@Tool)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"Tokyo\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tool/weather",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "tool",
+                "weather"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 12: Stock Price Tool (Bean)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ticker\": \"AAPL\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tool/stock",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "tool",
+                "stock"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 13: Personalized Tool (Context)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"Alice\",\n  \"tier\": \"Gold\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tool/personalized",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "tool",
+                "personalized"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 14: Dynamic Programmatic Tool",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"a\": 153.25,\n  \"b\": 846.75\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/tool/dynamic",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "tool",
+                "dynamic"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Category 5: Chat Memory",
+      "item": [
+        {
+          "name": "Example 15: Message Memory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"session123\",\n  \"message\": \"Hi, my name is John Doe.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/memory/message",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "memory",
+                "message"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 16: Vector Store Memory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"session123\",\n  \"message\": \"What is my name?\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/memory/vector",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "memory",
+                "vector"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 17: Get History",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"session123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/memory/history",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "memory",
+                "history"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 17: Clear Memory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sessionId\": \"session123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/memory/clear",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "memory",
+                "clear"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Category 6: Embeddings & RAG",
+      "item": [
+        {
+          "name": "Example 18: Manual Embedding",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Spring AI makes semantic search simple.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/rag/embed",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "rag",
+                "embed"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 19: Ingest Mock Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/rag/ingest-mock",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "rag",
+                "ingest-mock"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 20: Ask RAG",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"What is Antigravity?\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/rag/ask",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "rag",
+                "ask"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 21: Search with Filters",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"AI model\",\n  \"filterExpression\": \"category == 'gemini'\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/rag/search",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "rag",
+                "search"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Category 7: Agentic Workflows",
+      "item": [
+        {
+          "name": "Example 22: Chain Workflow",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"我最近用你们的软件遇到了许多问题，无法正常登录，希望能尽快解决并退款。\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/chain",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "chain"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 23: Parallelization Workflow",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Java 25 introduces amazing virtual threads and pattern matching enhancements! Click here to buy our software immediately!!!\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/parallel",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "parallel"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 24: Routing Workflow",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"I got charged twice for this month's billing cycle, please refund me.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/routing",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "routing"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 25: Orchestrator-Workers",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"topic\": \"Model Context Protocol (MCP) in Enterprise AI Architecture\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/orchestrator",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "orchestrator"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 26: Evaluator-Optimizer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"topic\": \"Garbage Collection in Java\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/evaluator",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "evaluator"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 27: MCP Integration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"List files\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "mcp"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
