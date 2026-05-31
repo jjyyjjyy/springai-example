@@ -1,0 +1,1908 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spring AI Learning Hub & Playground</title>
+    <meta name="description" content="An interactive playground and guide to explore Spring AI 2.0 and Google Gemini features served directly from your local Spring Boot backend." />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍃</text></svg>" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=SF+Mono&display=swap');
+
+      :root {
+        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        --font-mono: 'SF Mono', Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+        /* Apple-style colors */
+        --bg-page: #f5f5f7;
+        --bg-card: #ffffff;
+        --bg-hover: #f5f5f7;
+        --bg-active: #e8e8ed;
+        
+        --text-primary: #1d1d1f;
+        --text-secondary: #86868b;
+        --text-tertiary: #b0b0b5;
+        
+        --color-primary: #0071e3;
+        --color-primary-hover: #0077ed;
+        --color-primary-light: rgba(0, 113, 227, 0.1);
+        
+        --color-success: #34c759;
+        --color-warning: #ff9500;
+        --color-error: #ff3b30;
+        --color-neutral: #8e8e93;
+
+        --border-color: rgba(0, 0, 0, 0.08);
+        --border-radius-sm: 8px;
+        --border-radius-md: 12px;
+        --border-radius-lg: 16px;
+        --border-radius-full: 9999px;
+
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+        
+        --transition-fast: 0.15s ease;
+        --transition-normal: 0.25s ease;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--bg-page);
+        color: var(--text-primary);
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      /* Layout */
+      .app-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+        width: 100%;
+      }
+
+      /* Header */
+      .app-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 24px;
+        background-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo-badge {
+        background: linear-gradient(135deg, #0071e3, #42a5f5);
+        color: white;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 6px 12px;
+        border-radius: var(--border-radius-sm);
+        letter-spacing: 0.5px;
+      }
+
+      .header-title-area h1 {
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -0.2px;
+      }
+
+      .header-title-area p {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        background-color: var(--bg-page);
+        padding: 6px 12px;
+        border-radius: var(--border-radius-full);
+        border: 1px solid var(--border-color);
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var(--color-warning);
+        box-shadow: 0 0 8px var(--color-warning);
+      }
+
+      .status-dot.connected {
+        background-color: var(--color-success);
+        box-shadow: 0 0 8px var(--color-success);
+      }
+
+      .status-dot.error {
+        background-color: var(--color-error);
+        box-shadow: 0 0 8px var(--color-error);
+      }
+
+      .status-dot.connecting {
+        animation: pulse 1.5s infinite;
+      }
+
+      /* Tabs Bar */
+      .category-tabs-container {
+        background-color: var(--bg-card);
+        border-bottom: 1px solid var(--border-color);
+        padding: 10px 24px;
+        display: flex;
+        align-items: center;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .category-tabs-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .category-tabs-wrapper {
+        display: flex;
+        gap: 8px;
+        background-color: #f0f0f2;
+        padding: 4px;
+        border-radius: var(--border-radius-md);
+        margin: 0 auto;
+      }
+
+      .tab-button {
+        background: none;
+        border: none;
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        white-space: nowrap;
+      }
+
+      .tab-button:hover {
+        color: var(--text-primary);
+      }
+
+      .tab-button.active {
+        background-color: var(--bg-card);
+        color: var(--text-primary);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Primary Content Layout (Split Screen) */
+      .app-body {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .content-area {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .left-panel {
+        flex: 1;
+        overflow-y: auto;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .category-info {
+        margin-bottom: 10px;
+      }
+
+      .category-info h2 {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+      }
+
+      .category-info p {
+        font-size: 14px;
+        color: var(--text-secondary);
+      }
+
+      .examples-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+      }
+
+      /* Example Card styling */
+      .example-card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 16px;
+        cursor: pointer;
+        transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .example-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: rgba(0, 0, 0, 0.15);
+      }
+
+      .example-card.active {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 1px var(--color-primary), var(--shadow-md);
+      }
+
+      .card-header {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .card-badge-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .endpoint-badge {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        background-color: var(--bg-page);
+        padding: 4px 8px;
+        border-radius: var(--border-radius-full);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        max-width: 180px;
+      }
+
+      .method-badge {
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: white;
+      }
+
+      .method-badge.post {
+        background-color: #5856d6;
+      }
+
+      .method-badge.get {
+        background-color: #34c759;
+      }
+
+      .card-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-primary);
+        line-height: 1.3;
+      }
+
+      .card-description {
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.4;
+      }
+
+      .card-inputs {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border-top: 1px solid var(--border-color);
+        padding-top: 12px;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .input-label {
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
+
+      .text-input, .select-input {
+        width: 100%;
+        padding: 8px 10px;
+        font-size: 13px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-sm);
+        background-color: var(--bg-page);
+        color: var(--text-primary);
+        outline: none;
+        transition: var(--transition-fast);
+      }
+
+      .textarea-input {
+        width: 100%;
+        height: 60px;
+        padding: 8px 10px;
+        font-size: 13px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-sm);
+        background-color: var(--bg-page);
+        color: var(--text-primary);
+        outline: none;
+        resize: none;
+        font-family: inherit;
+        transition: var(--transition-fast);
+      }
+
+      .text-input:focus, .textarea-input:focus, .select-input:focus {
+        border-color: var(--color-primary);
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
+      }
+
+      .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+      }
+
+      .btn-execute {
+        width: 100%;
+        background-color: var(--bg-page);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        font-size: 13px;
+        font-weight: 500;
+        padding: 8px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: var(--transition-fast);
+      }
+
+      .example-card.active .btn-execute {
+        background-color: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+      }
+
+      .example-card.active .btn-execute:hover {
+        background-color: var(--color-primary-hover);
+      }
+
+      .btn-execute:hover {
+        background-color: var(--bg-active);
+      }
+
+      .spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        display: none;
+      }
+
+      .btn-execute.loading .spinner {
+        display: inline-block;
+        border-top-color: var(--text-primary);
+      }
+
+      .example-card.active .btn-execute.loading .spinner {
+        border-top-color: white;
+      }
+
+      /* Right Panel: Response & Stats Console */
+      .right-panel {
+        width: 420px;
+        border-left: 1px solid var(--border-color);
+        background-color: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .right-panel-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #ffffff;
+      }
+
+      .panel-title {
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      .metadata-row {
+        display: flex;
+        gap: 12px;
+        padding: 10px 20px;
+        background-color: #fafafa;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      .metadata-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .metadata-value {
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+
+      .response-content-wrapper {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        position: relative;
+      }
+
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+        color: var(--text-secondary);
+        gap: 12px;
+        padding: 0 40px;
+      }
+
+      .empty-state-icon {
+        font-size: 40px;
+      }
+
+      .response-box {
+        background-color: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-md);
+        padding: 16px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--text-primary);
+        white-space: pre-wrap;
+        word-break: break-all;
+        overflow-x: auto;
+        box-shadow: var(--shadow-sm);
+        min-height: 100px;
+      }
+
+      .response-box.stream {
+        border-left: 3px solid var(--color-primary);
+      }
+
+      .response-box.error {
+        border-left: 3px solid var(--color-error);
+        background-color: #fffbfb;
+        color: var(--color-error);
+      }
+
+      /* Markdown styling overrides */
+      .response-box.markdown-content {
+        font-family: var(--font-sans);
+        white-space: normal;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .response-box.markdown-content h1,
+      .response-box.markdown-content h2,
+      .response-box.markdown-content h3,
+      .response-box.markdown-content h4 {
+        margin-top: 16px;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .response-box.markdown-content h1 { font-size: 18px; }
+      .response-box.markdown-content h2 { font-size: 16px; }
+      .response-box.markdown-content h3 { font-size: 15px; }
+
+      .response-box.markdown-content p {
+        margin-bottom: 12px;
+      }
+
+      .response-box.markdown-content ul,
+      .response-box.markdown-content ol {
+        margin-left: 20px;
+        margin-bottom: 12px;
+      }
+
+      .response-box.markdown-content li {
+        margin-bottom: 4px;
+      }
+
+      .response-box.markdown-content pre {
+        background-color: #f5f5f7;
+        padding: 12px;
+        border-radius: 6px;
+        overflow-x: auto;
+        margin: 12px 0;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        border: 1px solid var(--border-color);
+      }
+
+      .response-box.markdown-content code {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        background-color: rgba(0, 0, 0, 0.05);
+        padding: 2px 4px;
+        border-radius: 4px;
+      }
+
+      .response-box.markdown-content pre code {
+        background-color: transparent;
+        padding: 0;
+        border-radius: 0;
+      }
+
+      .response-box.markdown-content blockquote {
+        border-left: 4px solid var(--border-color);
+        padding-left: 12px;
+        color: var(--text-secondary);
+        margin: 12px 0;
+        font-style: italic;
+      }
+
+      /* Streaming cursor animation */
+      .streaming-cursor {
+        display: inline-block;
+        width: 2px;
+        height: 1em;
+        background-color: var(--color-primary);
+        animation: blink-cursor 0.8s step-end infinite;
+        vertical-align: text-bottom;
+        margin-left: 2px;
+      }
+
+      @keyframes blink-cursor {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+
+      .response-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .btn-icon {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-weight: 500;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: var(--transition-fast);
+      }
+
+      .btn-icon:hover {
+        background-color: var(--bg-hover);
+        color: var(--text-primary);
+      }
+
+      /* Animations */
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.15); opacity: 0.6; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 1024px) {
+        .app-body {
+          flex-direction: column;
+        }
+        .content-area {
+          flex-direction: column;
+        }
+        .right-panel {
+          width: 100%;
+          height: 350px;
+          border-left: none;
+          border-top: 1px solid var(--border-color);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <header class="app-header">
+        <div class="header-left">
+          <span class="logo-badge">SPRING AI</span>
+          <div class="header-title-area">
+            <h1>Learning Hub</h1>
+            <p>Interactive playground for Spring AI 2.0 & Google Gemini</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="status-indicator">
+            <span id="backend-status-dot" class="status-dot connecting"></span>
+            <span id="backend-status-text">Connecting...</span>
+          </div>
+        </div>
+      </header>
+      
+      <div class="category-tabs-container">
+        <div class="category-tabs-wrapper" id="tabs-wrapper">
+          <!-- Dynamically populated category buttons -->
+        </div>
+      </div>
+
+      <div class="app-body">
+        <div class="content-area">
+          <div class="left-panel">
+            <div class="category-info">
+              <h2 id="category-name">Category Title</h2>
+              <p id="category-description">Category description goes here.</p>
+            </div>
+            
+            <div class="examples-grid" id="examples-grid">
+              <!-- Dynamically populated cards -->
+            </div>
+          </div>
+
+          <!-- Console Console Area -->
+          <div class="right-panel" id="response-panel">
+            <!-- Dynamically rendered or toggled empty state -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 34 Examples Catalog Configuration
+      const categories = [
+        {
+          id: 'chat',
+          name: 'Chat Client Basics',
+          description: 'Demonstrates the foundation of Spring AI 2.0\'s fluent ChatClient API.',
+          examples: [
+            {
+              id: 'chat-simple',
+              title: 'Basic Chat',
+              description: 'The simplest way to invoke the LLM. It takes user input, calls the model, and returns a plain text response.',
+              endpoint: '/api/chat/simple',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'message',
+                  label: 'User Message',
+                  type: 'textarea',
+                  defaultValue: 'Explain Spring AI in one sentence.'
+                }
+              ]
+            },
+            {
+              id: 'chat-options',
+              title: 'Chat with Options',
+              description: 'Demonstrates overriding default model parameters (like temperature) on a per-request basis.',
+              endpoint: '/api/chat/options',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'message',
+                  label: 'User Message',
+                  type: 'textarea',
+                  defaultValue: 'Write a haiku about Java 25.'
+                },
+                {
+                  name: 'temperature',
+                  label: 'Temperature (0.0 - 1.0)',
+                  type: 'number',
+                  defaultValue: 0.9
+                }
+              ]
+            },
+            {
+              id: 'chat-stream',
+              title: 'Streaming Chat',
+              description: 'Outputs tokens reactively as they are generated using Flux<String> (Server-Sent Events).',
+              endpoint: '/api/chat/stream',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'message',
+                  label: 'User Message',
+                  type: 'textarea',
+                  defaultValue: 'Write a short essay on AI agents.'
+                }
+              ]
+            },
+            {
+              id: 'chat-template',
+              title: 'Prompt Templates',
+              description: 'Demonstrates using template variables in user prompts and binding parameters dynamically.',
+              endpoint: '/api/chat/template',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'language',
+                  label: 'Target Language',
+                  type: 'text',
+                  defaultValue: 'Chinese'
+                },
+                {
+                  name: 'text',
+                  label: 'Text to Translate',
+                  type: 'textarea',
+                  defaultValue: 'I love programming in Spring Boot!'
+                }
+              ]
+            },
+            {
+              id: 'chat-roles',
+              title: 'Message Roles',
+              description: 'Controls LLM behavior/personality using a System Prompt + User Prompt.',
+              endpoint: '/api/chat/roles',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'systemPersona',
+                  label: 'System Persona',
+                  type: 'textarea',
+                  defaultValue: 'You are a grumpy 80-year-old COBOL developer who hates modern Java.'
+                },
+                {
+                  name: 'message',
+                  label: 'User Message',
+                  type: 'textarea',
+                  defaultValue: 'What is the best IDE for Java?'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'structured',
+          name: 'Structured Outputs',
+          description: 'Demonstrates how to parse unstructured LLM output into strongly-typed objects natively.',
+          examples: [
+            {
+              id: 'structured-bean',
+              title: 'Bean Output Converter',
+              description: 'Automatically requests and parses JSON conforming to a specific Java class (BookDetails).',
+              endpoint: '/api/structured/bean',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'bookName',
+                  label: 'Book Name',
+                  type: 'text',
+                  defaultValue: 'The Great Gatsby'
+                }
+              ]
+            },
+            {
+              id: 'structured-map',
+              title: 'Map Output Converter',
+              description: 'Parses the LLM output into a generic Map structure, useful when the target layout is dynamic.',
+              endpoint: '/api/structured/map',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'companyName',
+                  label: 'Company Name',
+                  type: 'text',
+                  defaultValue: 'Google'
+                }
+              ]
+            },
+            {
+              id: 'structured-list',
+              title: 'List Output Converter',
+              description: 'Automatically formats and parses the LLM output into a Java List.',
+              endpoint: '/api/structured/list',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'domain',
+                  label: 'Development Domain',
+                  type: 'text',
+                  defaultValue: 'frontend'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'multimodal',
+          name: 'Multimodal Inputs',
+          description: 'Demonstrates sending multimedia inputs (images, audio) alongside text prompts.',
+          examples: [
+            {
+              id: 'multimodal-image',
+              title: 'Image Analysis',
+              description: 'Passes an image URL dynamically to Gemini for visual reasoning and pixel analysis.',
+              endpoint: '/api/multimodal/image',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'imageUrl',
+                  label: 'Image URL',
+                  type: 'text',
+                  defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809'
+                },
+                {
+                  name: 'prompt',
+                  label: 'Prompt',
+                  type: 'textarea',
+                  defaultValue: 'Describe the colors and feelings evoked by this abstract image.'
+                }
+              ]
+            },
+            {
+              id: 'multimodal-audio',
+              title: 'Audio Input Analysis',
+              description: 'Sends a remote audio MP3 file resource to Gemini and asks the LLM to summarize/transcribe it.',
+              endpoint: '/api/multimodal/audio',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'audioUrl',
+                  label: 'Audio MP3 URL',
+                  type: 'text',
+                  defaultValue: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
+                },
+                {
+                  name: 'prompt',
+                  label: 'Prompt',
+                  type: 'textarea',
+                  defaultValue: 'Describe the music in this audio clip, including the tempo, instruments, and vibe.'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'tool',
+          name: 'Function Calling & Tools',
+          description: 'Equips Gemini with custom Java functions to retrieve real-time or dynamic information.',
+          examples: [
+            {
+              id: 'tool-weather',
+              title: 'Tool via @Tool Annotation',
+              description: 'Exposes a weatherService bean directly. The LLM automatically calls it for weather queries.',
+              endpoint: '/api/tool/weather',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'city',
+                  label: 'City',
+                  type: 'text',
+                  defaultValue: 'Beijing'
+                }
+              ]
+            },
+            {
+              id: 'tool-stock',
+              title: 'Tool via @Bean Name',
+              description: 'Registers the stock price function pointing to its Spring bean name ("stockPriceFunction").',
+              endpoint: '/api/tool/stock',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'ticker',
+                  label: 'Stock Ticker Symbol',
+                  type: 'text',
+                  defaultValue: 'AAPL'
+                }
+              ]
+            },
+            {
+              id: 'tool-personalized',
+              title: 'Tool with ToolContext',
+              description: 'Passes user-specific session context (username, membership tier) programmatically to the tool.',
+              endpoint: '/api/tool/personalized',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'username',
+                  label: 'User Name',
+                  type: 'text',
+                  defaultValue: 'Alice'
+                },
+                {
+                  name: 'tier',
+                  label: 'Membership Tier',
+                  type: 'select',
+                  defaultValue: 'Gold',
+                  options: [
+                    { label: 'Bronze', value: 'Bronze' },
+                    { label: 'Silver', value: 'Silver' },
+                    { label: 'Gold', value: 'Gold' },
+                    { label: 'Platinum', value: 'Platinum' }
+                  ]
+                }
+              ]
+            },
+            {
+              id: 'tool-dynamic',
+              title: 'Dynamic Programmatic Tool',
+              description: 'Programmatically constructs and registers a FunctionToolCallback at runtime.',
+              endpoint: '/api/tool/dynamic',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'a',
+                  label: 'Value A',
+                  type: 'number',
+                  defaultValue: 153.25
+                },
+                {
+                  name: 'b',
+                  label: 'Value B',
+                  type: 'number',
+                  defaultValue: 846.75
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'memory',
+          name: 'Chat Memory',
+          description: 'Demonstrates maintaining state and history across multiple HTTP requests using ChatMemory.',
+          examples: [
+            {
+              id: 'memory-message',
+              title: 'Message History Advisor',
+              description: 'Keeps conversation history using MessageChatMemoryAdvisor, isolated by sessionId.',
+              endpoint: '/api/memory/message',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'sessionId',
+                  label: 'Session ID',
+                  type: 'text',
+                  defaultValue: 'chat-sess-01'
+                },
+                {
+                  name: 'message',
+                  label: 'Message',
+                  type: 'textarea',
+                  defaultValue: 'Hi, my name is John Doe.'
+                }
+              ]
+            },
+            {
+              id: 'memory-vector',
+              title: 'Vector Store Memory Advisor',
+              description: 'Utilizes a Vector Store to save and query conversation history semantically.',
+              endpoint: '/api/memory/vector',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'sessionId',
+                  label: 'Session ID',
+                  type: 'text',
+                  defaultValue: 'chat-sess-01'
+                },
+                {
+                  name: 'message',
+                  label: 'Message',
+                  type: 'textarea',
+                  defaultValue: 'What is my name?'
+                }
+              ]
+            },
+            {
+              id: 'memory-history',
+              title: 'Inspect Memory Store',
+              description: 'Interacts directly with the ChatMemory store to fetch all logged messages for a session.',
+              endpoint: '/api/memory/history',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'sessionId',
+                  label: 'Session ID',
+                  type: 'text',
+                  defaultValue: 'chat-sess-01'
+                }
+              ]
+            },
+            {
+              id: 'memory-clear',
+              title: 'Clear Chat Memory',
+              description: 'Clears all messages and state from the ChatMemory store for a specific session.',
+              endpoint: '/api/memory/clear',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'sessionId',
+                  label: 'Session ID',
+                  type: 'text',
+                  defaultValue: 'chat-sess-01'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'rag',
+          name: 'Embeddings & RAG',
+          description: 'Demonstrates Retrieval-Augmented Generation (RAG) and semantic vector database search.',
+          examples: [
+            {
+              id: 'rag-embed',
+              title: 'Manual Embedding',
+              description: 'Directly converts text into a high-dimensional floating-point vector using Google GenAI.',
+              endpoint: '/api/rag/embed',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'text',
+                  label: 'Text to Embed',
+                  type: 'textarea',
+                  defaultValue: 'Spring AI makes semantic search simple.'
+                }
+              ]
+            },
+            {
+              id: 'rag-ingest-mock',
+              title: 'Ingestion Pipeline',
+              description: 'Splits mock docs (Antigravity assistant, Spring AI 2.0, Gemini 3.1) and indexes them into VectorStore.',
+              endpoint: '/api/rag/ingest-mock',
+              method: 'GET',
+              fields: []
+            },
+            {
+              id: 'rag-ask',
+              title: 'QA RAG Advisor',
+              description: 'Uses QuestionAnswerAdvisor to auto-query the VectorStore, inject context, and answer grounded questions.',
+              endpoint: '/api/rag/ask',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'question',
+                  label: 'Question',
+                  type: 'textarea',
+                  defaultValue: 'What is Antigravity?'
+                }
+              ]
+            },
+            {
+              id: 'rag-search',
+              title: 'Vector Search with Filters',
+              description: 'Performs manual similarity search applying filter expressions on metadata categories.',
+              endpoint: '/api/rag/search',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'query',
+                  label: 'Search Query',
+                  type: 'text',
+                  defaultValue: 'AI model'
+                },
+                {
+                  name: 'filterExpression',
+                  label: 'Filter Expression',
+                  type: 'text',
+                  defaultValue: "category == 'gemini'"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'agent',
+          name: 'Agentic Workflows',
+          description: 'Triggers advanced cognitive patterns: chains, routing, orchestrator-workers, and subagents.',
+          examples: [
+            {
+              id: 'agent-chain',
+              title: 'Chain Workflow (Prompt Chaining)',
+              description: 'Translates query, runs sentiment evaluation, and drafts email responses sequentially.',
+              endpoint: '/api/agent/chain',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'text',
+                  label: 'Raw Input Text',
+                  type: 'textarea',
+                  defaultValue: '我最近用你们的软件遇到了许多问题，无法正常登录，希望能尽快解决并退款。'
+                }
+              ]
+            },
+            {
+              id: 'agent-parallel',
+              title: 'Parallelization Workflow',
+              description: 'Runs concurrent evaluations (grammar, SEO, safety) on the input text.',
+              endpoint: '/api/agent/parallel',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'text',
+                  label: 'Input Text',
+                  type: 'textarea',
+                  defaultValue: 'Java 25 introduces amazing virtual threads and pattern matching enhancements! Click here to buy our software immediately!!!'
+                }
+              ]
+            },
+            {
+              id: 'agent-routing',
+              title: 'Routing Workflow',
+              description: 'Classifies the query (Billing/Technical/General) and resolves using a targeted expert persona.',
+              endpoint: '/api/agent/routing',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'query',
+                  label: 'User Query',
+                  type: 'textarea',
+                  defaultValue: 'I got charged twice for this month\'s billing cycle, please refund me.'
+                }
+              ]
+            },
+            {
+              id: 'agent-orchestrator',
+              title: 'Orchestrator-Workers Workflow',
+              description: 'Breaks down a complex topic, assigns sub-analyses to worker agents, and compiles a combined report.',
+              endpoint: '/api/agent/orchestrator',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'topic',
+                  label: 'Complex Topic',
+                  type: 'text',
+                  defaultValue: 'Model Context Protocol (MCP) in Enterprise AI Architecture'
+                }
+              ]
+            },
+            {
+              id: 'agent-evaluator',
+              title: 'Evaluator-Optimizer Workflow',
+              description: 'Generates and iteratively refines a rhyming poem using a critic/optimizer loop.',
+              endpoint: '/api/agent/evaluator',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'topic',
+                  label: 'Poem Topic',
+                  type: 'text',
+                  defaultValue: 'Garbage Collection in Java'
+                }
+              ]
+            },
+            {
+              id: 'agent-mcp',
+              title: 'MCP Server Integration',
+              description: 'Demonstrates programmatic setup and file operations via Model Context Protocol filesystem integration.',
+              endpoint: '/api/agent/mcp',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'query',
+                  label: 'MCP Command/Query',
+                  type: 'text',
+                  defaultValue: 'List files'
+                }
+              ]
+            },
+            {
+              id: 'agent-skills',
+              title: 'Agent Skills (Modular Capabilities)',
+              description: 'Loads modular capability definitions dynamically from SKILL.md rules.',
+              endpoint: '/api/agent/skills',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'message',
+                  label: 'Code review task',
+                  type: 'textarea',
+                  defaultValue: 'Please review this java code: public class Test { public static void main(String[] args) { System.out.println("Hello"); } }'
+                }
+              ]
+            },
+            {
+              id: 'agent-ask',
+              title: 'AskUserQuestion (Interactive Clarification)',
+              description: 'Prompts the user with multiple choice questions if instructions require clarification.',
+              endpoint: '/api/agent/ask',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'message',
+                  label: 'Instructions',
+                  type: 'textarea',
+                  defaultValue: 'What is the best way to deploy a spring boot app?'
+                }
+              ]
+            },
+            {
+              id: 'agent-todo',
+              title: 'TodoWrite (Structured Task Planning)',
+              description: 'Demonstrates structured progress updates and step execution mapping for complex operations.',
+              endpoint: '/api/agent/todo',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'sessionId',
+                  label: 'Session ID',
+                  type: 'text',
+                  defaultValue: 'todo-default-session'
+                },
+                {
+                  name: 'message',
+                  label: 'Task Details',
+                  type: 'textarea',
+                  defaultValue: 'Create a todo checklist for building a house.'
+                }
+              ]
+            },
+            {
+              id: 'agent-subagents',
+              title: 'Subagent Orchestration',
+              description: 'Main orchestrator delegates sub-tasks to custom specialized subagents.',
+              endpoint: '/api/agent/subagents',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'message',
+                  label: 'Instruction',
+                  type: 'textarea',
+                  defaultValue: 'Please perform a code review on our code quality using our refactoring subagent.'
+                }
+              ]
+            },
+            {
+              id: 'agent-memory',
+              title: 'AutoMemoryTools (Durable Long-Term)',
+              description: 'Persists context and learnings in files across execution sessions.',
+              endpoint: '/api/agent/memory',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'sessionId',
+                  label: 'Session ID',
+                  type: 'text',
+                  defaultValue: 'memory-default-session'
+                },
+                {
+                  name: 'message',
+                  label: 'Remember Query',
+                  type: 'textarea',
+                  defaultValue: 'Remember that my favorite programming language is Java. What is my favorite programming language?'
+                }
+              ]
+            },
+            {
+              id: 'agent-session',
+              title: 'Session Compaction',
+              description: 'Demonstrates Turn-Aware Compaction with Session Service context limits.',
+              endpoint: '/api/agent/session',
+              method: 'POST',
+              fields: [
+                {
+                  name: 'sessionId',
+                  label: 'Session ID',
+                  type: 'text',
+                  defaultValue: 'default-session-id'
+                },
+                {
+                  name: 'message',
+                  label: 'Message',
+                  type: 'textarea',
+                  defaultValue: 'Hello, how are you?'
+                }
+              ]
+            }
+          ]
+        }
+      ];
+
+      // Application State
+      let activeTabId = 'chat';
+      let selectedExample = categories[0].examples[0];
+      let runningExampleId = null;
+
+      // DOM Elements
+      const tabsWrapper = document.getElementById('tabs-wrapper');
+      const categoryName = document.getElementById('category-name');
+      const categoryDescription = document.getElementById('category-description');
+      const examplesGrid = document.getElementById('examples-grid');
+      const responsePanel = document.getElementById('response-panel');
+      const statusDot = document.getElementById('backend-status-dot');
+      const statusText = document.getElementById('backend-status-text');
+
+      // Initialize UI
+      function init() {
+        renderTabs();
+        selectCategory(activeTabId);
+        checkBackendStatus();
+        setInterval(checkBackendStatus, 15000);
+      }
+
+      // Check Spring Boot backend availability
+      async function checkBackendStatus() {
+        try {
+          const res = await fetch('/api/chat/simple', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: 'Ping' }),
+          });
+          if (res.ok) {
+            statusDot.className = 'status-dot connected';
+            statusText.textContent = 'Backend Active';
+          } else {
+            statusDot.className = 'status-dot error';
+            statusText.textContent = 'Backend Error';
+          }
+        } catch {
+          statusDot.className = 'status-dot error';
+          statusText.textContent = 'Backend Offline';
+        }
+      }
+
+      // Render Category Navigation Tabs
+      function renderTabs() {
+        tabsWrapper.innerHTML = '';
+        categories.forEach(category => {
+          const btn = document.createElement('button');
+          btn.className = `tab-button ${category.id === activeTabId ? 'active' : ''}`;
+          btn.textContent = category.name;
+          btn.addEventListener('click', () => {
+            activeTabId = category.id;
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectCategory(activeTabId);
+          });
+          tabsWrapper.appendChild(btn);
+        });
+      }
+
+      // Select Category Tab
+      function selectCategory(catId) {
+        const category = categories.find(c => c.id === catId);
+        if (!category) return;
+
+        categoryName.textContent = category.name;
+        categoryDescription.textContent = category.description;
+        
+        if (category.examples.length > 0) {
+          selectedExample = category.examples[0];
+        } else {
+          selectedExample = null;
+        }
+
+        renderExamples(category.examples);
+        renderResponseConsole(selectedExample, null);
+      }
+
+      // Render Examples Grid
+      function renderExamples(examples) {
+        examplesGrid.innerHTML = '';
+        examples.forEach(example => {
+          const isActive = selectedExample && selectedExample.id === example.id;
+          
+          const card = document.createElement('div');
+          card.className = `example-card ${isActive ? 'active' : ''}`;
+          card.dataset.id = example.id;
+          card.addEventListener('click', () => {
+            selectedExample = example;
+            document.querySelectorAll('.example-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            renderResponseConsole(example, null);
+          });
+
+          // Card header
+          const cardHeader = document.createElement('div');
+          cardHeader.className = 'card-header';
+          
+          const badgeRow = document.createElement('div');
+          badgeRow.className = 'card-badge-row';
+          
+          const endpointBadge = document.createElement('span');
+          endpointBadge.className = 'endpoint-badge';
+          endpointBadge.textContent = example.endpoint;
+          endpointBadge.title = example.endpoint;
+          
+          const methodBadge = document.createElement('span');
+          methodBadge.className = `method-badge ${example.method.toLowerCase()}`;
+          methodBadge.textContent = example.method;
+
+          badgeRow.appendChild(endpointBadge);
+          badgeRow.appendChild(methodBadge);
+
+          const title = document.createElement('h3');
+          title.className = 'card-title';
+          title.textContent = example.title;
+
+          const desc = document.createElement('p');
+          desc.className = 'card-description';
+          desc.textContent = example.description;
+
+          cardHeader.appendChild(badgeRow);
+          cardHeader.appendChild(title);
+          cardHeader.appendChild(desc);
+
+          card.appendChild(cardHeader);
+
+          // Card inputs
+          if (example.fields.length > 0) {
+            const inputsDiv = document.createElement('div');
+            inputsDiv.className = 'card-inputs';
+            inputsDiv.addEventListener('click', e => e.stopPropagation());
+
+            example.fields.forEach(field => {
+              const group = document.createElement('div');
+              group.className = 'input-group';
+
+              const label = document.createElement('label');
+              label.className = 'input-label';
+              label.setAttribute('for', `${example.id}-${field.name}`);
+              label.textContent = field.label;
+
+              let inputEl;
+              if (field.type === 'textarea') {
+                inputEl = document.createElement('textarea');
+                inputEl.className = 'textarea-input';
+                inputEl.value = field.defaultValue;
+              } else if (field.type === 'select') {
+                inputEl = document.createElement('select');
+                inputEl.className = 'select-input';
+                field.options.forEach(opt => {
+                  const optEl = document.createElement('option');
+                  optEl.value = opt.value;
+                  optEl.textContent = opt.label;
+                  if (opt.value === field.defaultValue) optEl.selected = true;
+                  inputEl.appendChild(optEl);
+                });
+              } else {
+                inputEl = document.createElement('input');
+                inputEl.type = field.type === 'number' ? 'number' : 'text';
+                if (field.type === 'number') inputEl.step = 'any';
+                inputEl.className = 'text-input';
+                inputEl.value = field.defaultValue;
+              }
+
+              inputEl.id = `${example.id}-${field.name}`;
+              inputEl.dataset.field = field.name;
+
+              group.appendChild(label);
+              group.appendChild(inputEl);
+              inputsDiv.appendChild(group);
+            });
+
+            card.appendChild(inputsDiv);
+          }
+
+          // Card footer
+          const footer = document.createElement('div');
+          footer.className = 'card-footer';
+
+          const runBtn = document.createElement('button');
+          const isCurrentlyRunning = runningExampleId === example.id;
+          runBtn.className = `btn-execute ${isCurrentlyRunning ? 'loading' : ''}`;
+          runBtn.disabled = isCurrentlyRunning;
+          
+          const spinner = document.createElement('span');
+          spinner.className = 'spinner';
+          
+          const btnText = document.createElement('span');
+          btnText.textContent = isCurrentlyRunning ? 'Running...' : 'Run Example';
+          
+          const playSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          playSvg.setAttribute("width", "12");
+          playSvg.setAttribute("height", "12");
+          playSvg.setAttribute("viewBox", "0 0 24 24");
+          playSvg.setAttribute("fill", "none");
+          playSvg.setAttribute("stroke", "currentColor");
+          playSvg.setAttribute("stroke-width", "2.5");
+          
+          const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+          polygon.setAttribute("points", "5 3 19 12 5 21 5 3");
+          playSvg.appendChild(polygon);
+
+          runBtn.appendChild(spinner);
+          if (!isCurrentlyRunning) runBtn.appendChild(playSvg);
+          runBtn.appendChild(btnText);
+
+          runBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            const payload = {};
+            card.querySelectorAll('[data-field]').forEach(input => {
+              let val = input.value;
+              const fieldMeta = example.fields.find(f => f.name === input.dataset.field);
+              if (fieldMeta && fieldMeta.type === 'number') {
+                val = val === '' ? '' : parseFloat(val);
+              }
+              payload[input.dataset.field] = val;
+            });
+            executeExample(example, payload);
+          });
+
+          footer.appendChild(runBtn);
+          card.appendChild(footer);
+
+          examplesGrid.appendChild(card);
+        });
+      }
+
+      // Execute endpoint
+      async function executeExample(example, payload) {
+        runningExampleId = example.id;
+        renderExamples(categories.find(c => c.id === activeTabId).examples);
+        renderResponseConsole(example, { loading: true, payload });
+
+        const startTime = Date.now();
+        let status = 'Running';
+        let responseText = '';
+        let latency = null;
+        let isError = false;
+
+        try {
+          const url = example.endpoint;
+          const options = {
+            method: example.method,
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          };
+
+          if (example.method === 'POST') {
+            options.body = JSON.stringify(payload);
+          }
+
+          // Handle Event Stream Response (SSE) for streaming examples
+          if (example.id === 'chat-stream') {
+            // Pre-create the streaming console with an empty response box
+            renderResponseConsole(example, { status: 'Streaming', payload, response: '', loading: false });
+            const responseBox = document.getElementById('console-response-box');
+            if (responseBox) {
+              responseBox.classList.add('stream', 'markdown-content');
+              responseBox.innerHTML = '<span class="streaming-cursor"></span>';
+            }
+
+            const response = await fetch(url, options);
+            if (!response.ok) {
+              throw new Error(`HTTP Error ${response.status}: ${await response.text()}`);
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let accumulated = '';
+            let sseBuffer = ''; // Buffer for incomplete SSE lines across chunks
+
+            while (true) {
+              const { value, done: readerDone } = await reader.read();
+              if (readerDone) break;
+
+              const chunk = decoder.decode(value, { stream: true });
+              sseBuffer += chunk;
+
+              // Process complete SSE lines (delimited by \n\n or \n)
+              const lines = sseBuffer.split('\n');
+              // Keep the last element as it may be an incomplete line
+              sseBuffer = lines.pop() || '';
+
+              let hasNewData = false;
+              for (const line of lines) {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('data:')) {
+                  const dataContent = trimmed.substring(5);
+                  // Skip empty data lines and SSE keep-alive
+                  if (dataContent.length > 0) {
+                    accumulated += dataContent;
+                    hasNewData = true;
+                  }
+                }
+              }
+
+              // Update DOM only when we have new data to render
+              if (hasNewData && responseBox) {
+                if (typeof marked !== 'undefined') {
+                  responseBox.innerHTML = marked.parse(accumulated) + '<span class="streaming-cursor"></span>';
+                } else {
+                  responseBox.textContent = accumulated;
+                }
+                // Auto-scroll the response panel
+                const wrapper = responseBox.closest('.response-content-wrapper');
+                if (wrapper) wrapper.scrollTop = wrapper.scrollHeight;
+              }
+              responseText = accumulated;
+            }
+
+            // Process any remaining buffer
+            if (sseBuffer.trim().startsWith('data:')) {
+              const dataContent = sseBuffer.trim().substring(5);
+              if (dataContent.length > 0) {
+                accumulated += dataContent;
+                responseText = accumulated;
+              }
+            }
+
+            // Final render without cursor
+            if (responseBox && typeof marked !== 'undefined') {
+              responseBox.innerHTML = marked.parse(accumulated);
+            } else if (responseBox) {
+              responseBox.textContent = accumulated;
+            }
+
+            status = '200 OK (Stream Finished)';
+            latency = Date.now() - startTime;
+            renderResponseConsole(example, { status, payload, response: responseText, duration: latency });
+            runningExampleId = null;
+            renderExamples(categories.find(c => c.id === activeTabId).examples);
+            return;
+          }
+
+          // Standard API Calls
+          const response = await fetch(url, options);
+          latency = Date.now() - startTime;
+          status = `${response.status} ${response.statusText}`;
+          responseText = await response.text();
+          isError = !response.ok;
+          
+          renderResponseConsole(example, { 
+            status, 
+            payload, 
+            response: responseText, 
+            duration: latency, 
+            error: isError ? responseText : null 
+          });
+
+        } catch (err) {
+          latency = Date.now() - startTime;
+          renderResponseConsole(example, { 
+            status: 'Network Error', 
+            payload, 
+            error: err.message || 'Failed to connect to backend', 
+            duration: latency 
+          });
+        } finally {
+          runningExampleId = null;
+          renderExamples(categories.find(c => c.id === activeTabId).examples);
+        }
+      }
+
+      // Render Console Output
+      function renderResponseConsole(example, execState) {
+        responsePanel.innerHTML = '';
+        if (!example) {
+          responsePanel.innerHTML = `
+            <div class="right-panel-header">
+              <h3 class="panel-title">Response Console</h3>
+            </div>
+            <div class="empty-state">
+              <span class="empty-state-icon">⚡</span>
+              <h4>No Active Execution</h4>
+              <p>Select an API example card on the left and click "Run Example" to view real-time Spring Boot responses.</p>
+            </div>
+          `;
+          return;
+        }
+
+        const isStateAvailable = !!execState;
+        const isLoading = isStateAvailable && execState.loading;
+        const status = isStateAvailable ? execState.status : null;
+        const duration = isStateAvailable ? execState.duration : null;
+        const error = isStateAvailable ? execState.error : null;
+        const responseVal = isStateAvailable ? execState.response : null;
+        
+        let payload = null;
+        if (isStateAvailable) {
+          payload = execState.payload;
+        } else {
+          payload = {};
+          example.fields.forEach(f => {
+            payload[f.name] = f.defaultValue;
+          });
+        }
+
+        // Header
+        const header = document.createElement('div');
+        header.className = 'right-panel-header';
+        
+        const title = document.createElement('h3');
+        title.className = 'panel-title';
+        title.textContent = 'Response Console';
+        
+        header.appendChild(title);
+        
+        if (isStateAvailable) {
+          const clearBtn = document.createElement('button');
+          clearBtn.className = 'btn-icon';
+          clearBtn.textContent = 'Clear';
+          clearBtn.addEventListener('click', () => {
+            renderResponseConsole(selectedExample, null);
+          });
+          header.appendChild(clearBtn);
+        }
+
+        // Metadata row
+        const metaRow = document.createElement('div');
+        metaRow.className = 'metadata-row';
+        
+        const item1 = document.createElement('div');
+        item1.className = 'metadata-item';
+        item1.innerHTML = `<span>Endpoint:</span><span class="metadata-value">${example.endpoint}</span>`;
+        metaRow.appendChild(item1);
+
+        if (status) {
+          const item2 = document.createElement('div');
+          item2.className = 'metadata-item';
+          const isSuccess = status.startsWith('200') || status === 'Streaming' || status.includes('Finished');
+          item2.innerHTML = `<span>Status:</span><span class="metadata-value" style="color: ${isSuccess ? 'var(--color-success)' : 'var(--color-error)'}">${status}</span>`;
+          metaRow.appendChild(item2);
+        }
+
+        if (duration !== null) {
+          const item3 = document.createElement('div');
+          item3.className = 'metadata-item';
+          item3.innerHTML = `<span>Latency:</span><span class="metadata-value">${duration} ms</span>`;
+          metaRow.appendChild(item3);
+        }
+
+        // Content Wrapper
+        const wrapper = document.createElement('div');
+        wrapper.className = 'response-content-wrapper';
+
+        // Parameters Section
+        const paramsTitle = document.createElement('h4');
+        paramsTitle.style.cssText = 'font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;';
+        paramsTitle.textContent = 'Request Parameters';
+
+        const paramsBox = document.createElement('pre');
+        paramsBox.style.cssText = 'font-family: var(--font-mono); font-size: 11px; background-color: #f5f5f7; padding: 10px; border-radius: 6px; overflow-x: auto; border: 1px solid var(--border-color); color: var(--text-primary); margin-bottom: 16px;';
+        paramsBox.textContent = JSON.stringify(payload, null, 2);
+
+        wrapper.appendChild(paramsTitle);
+        wrapper.appendChild(paramsBox);
+
+        // Body Section
+        const bodyTitle = document.createElement('h4');
+        bodyTitle.style.cssText = 'font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;';
+        bodyTitle.textContent = 'Response Body';
+
+        wrapper.appendChild(bodyTitle);
+
+        if (isLoading && !responseVal) {
+          const loader = document.createElement('div');
+          loader.style.cssText = 'display: flex; flex-direction: column; gap: 8px; padding: 30px 0; align-items: center;';
+          loader.innerHTML = `
+            <span class="spinner" style="display:inline-block; border-color: rgba(0,113,227,0.1); border-top-color: var(--color-primary); width: 20px; height: 20px;"></span>
+            <span style="font-size: 12px; color: var(--text-secondary);">Waiting for Spring Boot response...</span>
+          `;
+          wrapper.appendChild(loader);
+        } else if (error) {
+          const errBox = document.createElement('pre');
+          errBox.className = 'response-box error';
+          errBox.textContent = error;
+          wrapper.appendChild(errBox);
+        } else if (responseVal !== null) {
+          let isJson = false;
+          let formattedJson = '';
+          try {
+            const parsed = JSON.parse(responseVal);
+            formattedJson = JSON.stringify(parsed, null, 2);
+            isJson = true;
+          } catch (e) {
+            // Not JSON
+          }
+
+          let resBox;
+          if (isJson) {
+            resBox = document.createElement('pre');
+            resBox.className = `response-box ${status === 'Streaming' ? 'stream' : ''}`;
+            resBox.textContent = formattedJson;
+          } else {
+            resBox = document.createElement('div');
+            resBox.className = `response-box ${status === 'Streaming' ? 'stream' : ''} markdown-content`;
+            if (typeof marked !== 'undefined') {
+              resBox.innerHTML = marked.parse(responseVal);
+            } else {
+              resBox.textContent = responseVal;
+            }
+          }
+          resBox.id = 'console-response-box';
+          wrapper.appendChild(resBox);
+
+          const actions = document.createElement('div');
+          actions.className = 'response-actions';
+          
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'btn-icon';
+          copyBtn.innerHTML = `
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Copy Response</span>
+          `;
+          
+          copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(isJson ? formattedJson : responseVal).then(() => {
+              const label = copyBtn.querySelector('span');
+              label.textContent = 'Copied!';
+              setTimeout(() => label.textContent = 'Copy Response', 2000);
+            });
+          });
+
+          actions.appendChild(copyBtn);
+          wrapper.appendChild(actions);
+        } else {
+          const infoBox = document.createElement('div');
+          infoBox.style.cssText = 'padding: 20px; font-size: 12px; color: var(--text-secondary); text-align: center; background-color: #f5f5f7; borderRadius: 8px; border: 1px dashed var(--border-color);';
+          infoBox.textContent = 'Run the example on the left to see the output.';
+          wrapper.appendChild(infoBox);
+        }
+
+        responsePanel.appendChild(header);
+        responsePanel.appendChild(metaRow);
+        responsePanel.appendChild(wrapper);
+      }
+
+      // Run Init on Page Load
+      window.addEventListener('DOMContentLoaded', init);
+    </script>
+  </body>
+</html>

@@ -38,13 +38,22 @@ Ensure you are using Java 25. Run the Maven compile step:
 ./mvnw clean compile
 ```
 
-### 3. Run the Spring Boot Application
+### 3. Run Application
 
-Start the dev server:
+Start the backend server (ensure your `GEMINI_API_KEY` is exported):
 
 ```bash
+export GEMINI_API_KEY="your-api-key-here"
 ./mvnw spring-boot:run
 ```
+
+Once the application is running, open your web browser and navigate to:
+
+```
+http://localhost:8080/
+```
+
+This will load the **Interactive Playground Dashboard** (hosted in `src/main/resources/static/index.html`), allowing you to visually execute and test all 34 examples directly!
 
 ---
 
