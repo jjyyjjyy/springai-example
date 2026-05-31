@@ -869,6 +869,186 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Example 28: Agent Skills",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Please review this java code: public class Test { public static void main(String[] args) { System.out.println(\\\"Hello\\\"); } }\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/skills",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "skills"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 29: AskUserQuestion (Interactive Clarification)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What is the best way to deploy a spring boot app?\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/ask",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "ask"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 30: TodoWrite (Structured Task Planning)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Create a todo checklist for building a house.\",\n  \"sessionId\": \"todo-session-123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/todo",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "todo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 31: Subagent Orchestration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Please perform a code review on our code quality using our refactoring subagent.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/subagents",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "subagents"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 32: AutoMemoryTools (Durable Long-Term Memory)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Remember that my favorite programming language is Java. What is my favorite programming language?\",\n  \"sessionId\": \"memory-session-123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/memory",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "memory"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Example 33: Session Management",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Hello, how are you?\",\n  \"sessionId\": \"session-999\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/agent/session",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "agent",
+                "session"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }

@@ -1,23 +1,20 @@
 # Spring AI 2.0.0-SNAPSHOT & Google Gemini Examples
 
-This project is a progressive, step-by-step example codebase demonstrating **Spring AI 2.0.0-SNAPSHOT** features using *
-*Google Gemini** models. It covers 27 distinct examples ranging from basic chat prompts to structured output parsing,
+This project is a progressive, step-by-step example codebase demonstrating **Spring AI 2.0.0-SNAPSHOT** features using **Google Gemini** models. It covers 33 distinct examples ranging from basic chat prompts to structured output parsing,
 multimodal analysis, custom tool calling (functions), conversation memory management, RAG (Retrieval-Augmented
-Generation), and advanced Agentic Workflow patterns.
+Generation), advanced Agentic Workflow patterns, and Agent Community utilities/Memory advisors.
 
 📬 **Postman Collection**: A pre-configured [postman.json](file:///Users/jy/IdeaProjects/springai-example/postman.json)
-file is included in the project root. You can import it directly into Postman to test all 27 endpoints instantly!
+file is included in the project root. You can import it directly into Postman to test all 33 endpoints instantly!
 
 ---
 
-## 🛠️ Technology Stack & Configuration
+## 🛠️ Technology Stack
 
-- **JDK 25** (Java 25)
+- **Java 25**
 - **Spring Boot 4.1.0-SNAPSHOT**
-- **Spring AI 2.0.0-SNAPSHOT** (using snapshot & milestone repositories in Maven)
-- **Google Gemini 3.1 Flash Lite** (via `spring-ai-starter-model-google-genai` and `text-embedding-004`)
-- **Maven** for build management
-- **YAML Configuration** (`application.yml`)
+- **Spring AI 2.0.0-SNAPSHOT**
+- **Google Gemini 3.1 Flash Lite**
 
 ---
 
@@ -51,9 +48,9 @@ Start the dev server:
 
 ---
 
-## 📚 Codebase Catalog & API endpoints (27 Examples)
+## 📚 Codebase Catalog & API endpoints (33 Examples)
 
-Here is a list of all 27 progressive examples implemented across the controllers, together with the `curl` commands to
+Here is a list of all 33 progressive examples implemented across the controllers, together with the `curl` commands to
 test them using JSON request bodies.
 
 ---
@@ -222,4 +219,28 @@ Implemented in `me.jy.example.agent` package.
 * **Example 27: Model Context Protocol (MCP)** - Conceptually maps local/remote server tools to the `ChatClient`.
   ```bash
   curl -X POST -H "Content-Type: application/json" -d '{"query": "List files"}' http://localhost:8080/api/agent/mcp
+  ```
+* **Example 28: Agent Skills** - Modular capabilities loaded dynamically from markdown instructions.
+  ```bash
+  curl -X POST -H "Content-Type: application/json" -d '{"message": "Please review this java code: public class Test { public static void main(String[] args) { System.out.println(\"Hello\"); } }"}' http://localhost:8080/api/agent/skills
+  ```
+* **Example 29: AskUserQuestion (Interactive Clarification)** - Structured multiple-choice clarification prompt to the user.
+  ```bash
+  curl -X POST -H "Content-Type: application/json" -d '{"message": "What is the best way to deploy a spring boot app?"}' http://localhost:8080/api/agent/ask
+  ```
+* **Example 30: TodoWrite (Structured Task Planning)** - Step-by-step sequential planning and progress events during complex execution.
+  ```bash
+  curl -X POST -H "Content-Type: application/json" -d '{"message": "Create a todo checklist for building a house.", "sessionId": "todo-session-123"}' http://localhost:8080/api/agent/todo
+  ```
+* **Example 31: Subagent Orchestration** - Main orchestrator delegates tasks to specialized subagents in isolated context windows.
+  ```bash
+  curl -X POST -H "Content-Type: application/json" -d '{"message": "Please perform a code review on our code quality using our refactoring subagent."}' http://localhost:8080/api/agent/subagents
+  ```
+* **Example 32: AutoMemoryTools (Durable Long-Term Memory)** - Long-term facts persisted in structured files across multiple sessions.
+  ```bash
+  curl -X POST -H "Content-Type: application/json" -d '{"message": "Remember that my favorite programming language is Java. What is my favorite programming language?", "sessionId": "memory-session-123"}' http://localhost:8080/api/agent/memory
+  ```
+* **Example 33: Session Management (Turn-Aware Compaction)** - Turn-aware conversation event sourcing and compaction triggers.
+  ```bash
+  curl -X POST -H "Content-Type: application/json" -d '{"message": "Hello, how are you?", "sessionId": "session-999"}' http://localhost:8080/api/agent/session
   ```

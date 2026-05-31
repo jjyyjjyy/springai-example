@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Category 7: Agentic Patterns & Workflows REST Controller
  * Exposes endpoints to trigger and inspect intermediate execution steps
- * for each of the 6 agentic workflow patterns.
+ * for each of the agentic workflow patterns and memory/session tools.
  */
 @RestController
 @RequestMapping("/api/agent")
@@ -20,19 +20,37 @@ public class AgentController {
     private final OrchestratorWorkersWorkflow orchestratorWorkersWorkflow;
     private final EvaluatorOptimizerWorkflow evaluatorOptimizerWorkflow;
     private final McpWorkflow mcpWorkflow;
+    private final SkillsExample skillsExample;
+    private final AskUserQuestionExample askUserQuestionExample;
+    private final TodoWriteExample todoWriteExample;
+    private final SubagentsExample subagentsExample;
+    private final AutoMemoryExample autoMemoryExample;
+    private final SessionManagementExample sessionManagementExample;
 
     public AgentController(ChainWorkflow chainWorkflow,
                            ParallelWorkflow parallelWorkflow,
                            RoutingWorkflow routingWorkflow,
                            OrchestratorWorkersWorkflow orchestratorWorkersWorkflow,
                            EvaluatorOptimizerWorkflow evaluatorOptimizerWorkflow,
-                           McpWorkflow mcpWorkflow) {
+                           McpWorkflow mcpWorkflow,
+                           SkillsExample skillsExample,
+                           AskUserQuestionExample askUserQuestionExample,
+                           TodoWriteExample todoWriteExample,
+                           SubagentsExample subagentsExample,
+                           AutoMemoryExample autoMemoryExample,
+                           SessionManagementExample sessionManagementExample) {
         this.chainWorkflow = chainWorkflow;
         this.parallelWorkflow = parallelWorkflow;
         this.routingWorkflow = routingWorkflow;
         this.orchestratorWorkersWorkflow = orchestratorWorkersWorkflow;
         this.evaluatorOptimizerWorkflow = evaluatorOptimizerWorkflow;
         this.mcpWorkflow = mcpWorkflow;
+        this.skillsExample = skillsExample;
+        this.askUserQuestionExample = askUserQuestionExample;
+        this.todoWriteExample = todoWriteExample;
+        this.subagentsExample = subagentsExample;
+        this.autoMemoryExample = autoMemoryExample;
+        this.sessionManagementExample = sessionManagementExample;
     }
 
     /**
@@ -95,6 +113,69 @@ public class AgentController {
         return this.mcpWorkflow.runWorkflow(query);
     }
 
+    /**
+     * Example 28: Agent Skills
+     * Endpoint to load modular capability definitions from SKILL.md dynamically.
+     */
+    @PostMapping("/skills")
+    public String runSkillsExample(@RequestBody(required = false) SkillsRequest request) {
+        String message = (request != null && request.message() != null) ? request.message() : "Please review this java code: public class Test { public static void main(String[] args) { System.out.println(\"Hello\"); } }";
+        return this.skillsExample.runExample(message);
+    }
+
+    /**
+     * Example 29: AskUserQuestion (Interactive Clarification)
+     * Endpoint to prompt the user with choices if clarification is needed.
+     */
+    @PostMapping("/ask")
+    public String runAskExample(@RequestBody(required = false) AskRequest request) {
+        String message = (request != null && request.message() != null) ? request.message() : "What is the best way to deploy a spring boot app?";
+        return this.askUserQuestionExample.runExample(message);
+    }
+
+    /**
+     * Example 30: TodoWrite (Structured Task Planning)
+     * Endpoint demonstrating structured progress updates for complex operations.
+     */
+    @PostMapping("/todo")
+    public TodoWriteExample.TodoExampleResult runTodoExample(@RequestBody(required = false) TodoRequest request) {
+        String message = (request != null && request.message() != null) ? request.message() : "Create a todo checklist for building a house.";
+        String sessionId = (request != null && request.sessionId() != null) ? request.sessionId() : "todo-default-session";
+        return this.todoWriteExample.runExample(message, sessionId);
+    }
+
+    /**
+     * Example 31: Subagent Orchestration
+     * Endpoint where a main orchestrator delegates tasks to specialized subagents.
+     */
+    @PostMapping("/subagents")
+    public String runSubagentsExample(@RequestBody(required = false) SubagentsRequest request) {
+        String message = (request != null && request.message() != null) ? request.message() : "Please perform a code review on our code quality using our refactoring subagent.";
+        return this.subagentsExample.runExample(message);
+    }
+
+    /**
+     * Example 32: AutoMemoryTools (Durable Long-Term Memory)
+     * Endpoint to persist memory files across sessions.
+     */
+    @PostMapping("/memory")
+    public String runMemoryExample(@RequestBody(required = false) MemoryRequest request) {
+        String message = (request != null && request.message() != null) ? request.message() : "Remember that my favorite programming language is Java. What is my favorite programming language?";
+        String sessionId = (request != null && request.sessionId() != null) ? request.sessionId() : "memory-default-session";
+        return this.autoMemoryExample.runExample(message, sessionId);
+    }
+
+    /**
+     * Example 33: Session Management
+     * Endpoint demonstrating Turn-Aware Compaction with Session Service.
+     */
+    @PostMapping("/session")
+    public String runSessionExample(@RequestBody(required = false) SessionRequest request) {
+        String message = (request != null && request.message() != null) ? request.message() : "Hello, how are you?";
+        String sessionId = (request != null && request.sessionId() != null) ? request.sessionId() : "default-session-id";
+        return this.sessionManagementExample.runExample(message, sessionId);
+    }
+
     public record ChainRequest(String text) {
     }
 
@@ -112,4 +193,16 @@ public class AgentController {
 
     public record McpRequest(String query) {
     }
+
+    public record SkillsRequest(String message) {}
+
+    public record AskRequest(String message) {}
+
+    public record TodoRequest(String message, String sessionId) {}
+
+    public record SubagentsRequest(String message) {}
+
+    public record MemoryRequest(String message, String sessionId) {}
+
+    public record SessionRequest(String message, String sessionId) {}
 }
